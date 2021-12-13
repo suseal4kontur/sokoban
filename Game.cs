@@ -4,7 +4,8 @@
     {
         static void Main()
         {
-            Interface.OpenMap("map1.txt");
+            Map.LoadMap("map1.txt");
+            Map.PrintMap();
         }
     }
 }
