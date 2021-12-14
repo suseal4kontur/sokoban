@@ -4,7 +4,7 @@
     {
         static void Main()
         {
-            Map.LoadMap("map1.txt");
+            Map.LoadMap("map2.txt");
             Map.PrintMap();
         }
     }
