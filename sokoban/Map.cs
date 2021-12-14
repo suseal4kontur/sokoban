@@ -5,7 +5,7 @@ namespace Sokoban
 {
     public static class Map
     {
-        private static string[] MapData;
+        private static char[][] MapData;
         private static int MapWidth;
         private static int MapHeight;
 
@@ -45,7 +45,7 @@ namespace Sokoban
         public static void PrintMap()
         {
             if (MapData == null)
-                throw new NullReferenceException("A map must be loaded before accessing it");
+                throw new NullReferenceException("Map must be loaded before accessing it");
             foreach (var mapRow in MapData)
                 Console.WriteLine(mapRow);
         }
@@ -55,43 +55,59 @@ namespace Sokoban
         public static void SetItem(int x, int y, Item item)
         {
             CheckCoordsCorrectness(x, y, MapData);
-
-            
+            MapData[y][x] = ToChar(item);
         }
 
-        private static void CheckCoordsCorrectness(int x, int y, string[] mapData)
+        private static char[][] GetMapData(string fileName)
+        {
+            var mapDataByRows = File.ReadAllText("maps/" + fileName).Split("\r\n");
+            char[][] mapData = new char[mapDataByRows.Length][];
+            for (var i = 0; i < mapDataByRows.Length; i++)
+                mapData[i] = mapDataByRows[i].ToCharArray();
+            CheckMap(mapData, fileName);
+            return mapData;
+        }
+
+        private static void CheckCoordsCorrectness(int x, int y, char[][] mapData)
         {
             if (mapData == null)
-                throw new NullReferenceException("A map must be loaded before accessing it");
+                throw new NullReferenceException("Map must be loaded before accessing it");
 
             if (x < 0 || x > mapData[0].Length - 1 || y < 0 || y > mapData.Length - 1)
                 throw new IndexOutOfRangeException();
         }
 
-        private static Item GetItem(int x, int y, string[] mapData)
+        private static Item ToItem(char character) => character switch
+        {
+            'p' => Item.Player,
+            '#' => Item.Wall,
+            'o' => Item.Box,
+            '+' => Item.Lot,
+            'O' => Item.BoxOnLot,
+            'P' => Item.PlayerOnLot,
+            ' ' => Item.Empty,
+            _ => throw new ArgumentException($"The character {character} is unassigned"),
+        };
+
+        private static char ToChar(Item item) => item switch
+        {
+            Item.Player => 'p',
+            Item.Wall => '#',
+            Item.Box => 'o',
+            Item.Lot => '+',
+            Item.BoxOnLot => 'O',
+            Item.PlayerOnLot => 'P',
+            Item.Empty => ' ',
+            _ => throw new ArgumentException($"The item {item} has no character assingned to it"),
+        };
+
+        private static Item GetItem(int x, int y, char[][] mapData)
         {
             CheckCoordsCorrectness(x, y, mapData);
-
-            return mapData[y][x] switch
-            {
-                'p' => Item.Player,
-                '#' => Item.Wall,
-                'o' => Item.Box,
-                '+' => Item.Lot,
-                'O' => Item.BoxOnLot,
-                'P' => Item.PlayerOnLot,
-                _ => Item.Empty,
-            };
+            return ToItem(mapData[y][x]);
         }
 
-        private static string[] GetMapData(string fileName)
-        {
-            var mapData = File.ReadAllText("maps/" + fileName).Split("\r\n");
-            CheckMap(mapData, fileName);
-            return mapData;
-        }
-
-        private static void CheckMap(string[] mapData, string fileName)
+        private static void CheckMap(char[][] mapData, string fileName)
         {
             if (mapData == null || mapData[0].Length == 0)
                 throw new ArgumentException("Invalid map: rows must not be empty", fileName);
@@ -105,10 +121,10 @@ namespace Sokoban
             if (!AreMapItemsCorrect(mapData))
                 throw new ArgumentException("Invalid map: must contain one player and equal amounts of boxes and lots", fileName);
             if (!IsPlayerEnclosed(mapData))
-                throw new ArgumentException("Invalid map: a player must be enclosed by walls", fileName);
+                throw new ArgumentException("Invalid map: player must be enclosed by walls", fileName);
         }
 
-        private static bool AreMapItemsCorrect(string[] mapData)
+        private static bool AreMapItemsCorrect(char[][] mapData)
         {
             var playerFound = false;
             var boxCount = 0;
@@ -145,7 +161,7 @@ namespace Sokoban
             return playerFound && boxCount == lotCount && boxCount != 0;
         }
 
-        private static bool IsPlayerEnclosed(string[] mapData)
+        private static bool IsPlayerEnclosed(char[][] mapData)
         {
             var mapHeight = mapData.Length;
             var mapWidth = mapData[0].Length;
@@ -171,7 +187,7 @@ namespace Sokoban
             return false;
         }
 
-        private static int[] FindPlayerCoords(string[] mapData)
+        private static int[] FindPlayerCoords(char[][] mapData)
         {
             var mapHeight = mapData.Length;
             var mapWidth = mapData[0].Length;
@@ -191,27 +207,10 @@ namespace Sokoban
                 }
             }
 
-            return null;
+            throw new ArgumentException("Player is not found on the map");
         }
 
-        private static bool IsClosedLoopFound(string[] mapData, int mapWidth, int mapHeight,
-                                              int originX, int originY, int currentX, int currentY,
-                                              Direction wallPosition)
-        {
-            if (currentX == 0 || currentX == mapWidth - 1
-                || currentY == 0 || currentY == mapHeight - 1)
-                return false;
-
-            if (currentX == originX && currentY == originY)
-                return true;
-
-            var nextWallPosition = GetNextWallPosition(mapData, currentX, currentY, wallPosition);
-            var nextCoords = GetNextCoords(currentX, currentY, nextWallPosition);
-            return IsClosedLoopFound(mapData, mapWidth, mapHeight, originX, originY,
-                                     nextCoords[0], nextCoords[1], nextWallPosition);
-        }
-
-        private static Direction GetNextWallPosition(string[] mapData, int currentX, int currentY, 
+        private static Direction GetNextWallPosition(char[][] mapData, int currentX, int currentY,
                                                       Direction wallPosition)
         {
             var wallChecks = 0;
@@ -248,6 +247,23 @@ namespace Sokoban
                         break;
                 }
             }
+        }
+
+        private static bool IsClosedLoopFound(char[][] mapData, int mapWidth, int mapHeight,
+                                              int originX, int originY, int currentX, int currentY,
+                                              Direction wallPosition)
+        {
+            if (currentX == 0 || currentX == mapWidth - 1
+                || currentY == 0 || currentY == mapHeight - 1)
+                return false;
+
+            if (currentX == originX && currentY == originY)
+                return true;
+
+            var nextWallPosition = GetNextWallPosition(mapData, currentX, currentY, wallPosition);
+            var nextCoords = GetNextCoords(currentX, currentY, nextWallPosition);
+            return IsClosedLoopFound(mapData, mapWidth, mapHeight, originX, originY,
+                                     nextCoords[0], nextCoords[1], nextWallPosition);
         }
 
         private static int[] GetNextCoords(int currentX, int currentY, Direction nextWallPosition)

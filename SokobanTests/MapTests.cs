@@ -50,6 +50,17 @@ namespace SokobanTests
             action.Should().Throw<IndexOutOfRangeException>();
         }
 
+        [TestCase(3, 1, Sokoban.Map.Item.Empty)]
+        [TestCase(4, 1, Sokoban.Map.Item.BoxOnLot)]
+        public void SetItemTest(int x, int y, Sokoban.Map.Item item)
+        {
+            Sokoban.Map.ClearMap();
+            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.SetItem(x, y, item);
+            var readItem = Sokoban.Map.GetItem(x, y);
+            readItem.Should().Be(item);
+        }
+
         [TestCase("testmap3.txt")]
         [TestCase("testmap4.txt")]
         public void LoadMapEmptyTest(string fileName)
@@ -87,7 +98,7 @@ namespace SokobanTests
             Sokoban.Map.ClearMap();
             Action action = () => Sokoban.Map.LoadMap(fileName);
             action.Should().Throw<ArgumentException>()
-                  .WithMessage($"Invalid map: a player must be enclosed by walls (Parameter '{fileName}')");
+                  .WithMessage($"Invalid map: player must be enclosed by walls (Parameter '{fileName}')");
         }
 
         [TestCase("testmap11.txt")]
