@@ -6,8 +6,8 @@ namespace Sokoban
     public static class Map
     {
         private static char[][] MapData;
-        private static int MapWidth;
-        private static int MapHeight;
+        public static int MapWidth { get; private set; }
+        public static int MapHeight { get; private set; }
 
         public enum Item
         {
@@ -42,7 +42,7 @@ namespace Sokoban
             MapWidth = MapData[0].Length;
         }
 
-        public static void PrintMap()
+        public static void PrintMap() // maybe move to a different class
         {
             if (MapData == null)
                 throw new NullReferenceException("Map must be loaded before accessing it");
@@ -62,8 +62,10 @@ namespace Sokoban
         {
             var mapDataByRows = File.ReadAllText("maps/" + fileName).Split("\r\n");
             char[][] mapData = new char[mapDataByRows.Length][];
+
             for (var i = 0; i < mapDataByRows.Length; i++)
                 mapData[i] = mapDataByRows[i].ToCharArray();
+
             CheckMap(mapData, fileName);
             return mapData;
         }
@@ -171,16 +173,16 @@ namespace Sokoban
                 || playerCoords[1] == 0 || playerCoords[1] == mapHeight - 1)
                     return false;
 
-            Direction nextWallPosition;
+            Direction nextExpectedWallPosition;
             int[] nextCoords;
             for (var y = playerCoords[1] - 1; y >= 0; y--)
             {
                 if (GetItem(playerCoords[0], y, mapData) == Item.Wall)
                 {
-                    nextWallPosition = GetNextWallPosition(mapData, playerCoords[0], y + 1, Direction.North);
-                    nextCoords = GetNextCoords(playerCoords[0], y + 1, nextWallPosition);
+                    nextExpectedWallPosition = GetNextExpectedWallPosition(mapData, playerCoords[0], y + 1, Direction.North);
+                    nextCoords = GetNextCoords(playerCoords[0], y + 1, nextExpectedWallPosition);
                     return IsClosedLoopFound(mapData, mapWidth, mapHeight, playerCoords[0], y + 1,
-                                             nextCoords[0], nextCoords[1], nextWallPosition);
+                                             nextCoords[0], nextCoords[1], nextExpectedWallPosition);
                 }
             }
 
@@ -210,8 +212,8 @@ namespace Sokoban
             throw new ArgumentException("Player is not found on the map");
         }
 
-        private static Direction GetNextWallPosition(char[][] mapData, int currentX, int currentY,
-                                                      Direction wallPosition)
+        private static Direction GetNextExpectedWallPosition(char[][] mapData, int currentX, int currentY,
+                                                      Direction currentWallPosition)
         {
             var wallChecks = 0;
             while (true)
@@ -219,30 +221,30 @@ namespace Sokoban
                 if (wallChecks > 3)
                     throw new TimeoutException("Invalid map: the player is surrounded by 4 walls");
 
-                switch (wallPosition)
+                switch (currentWallPosition)
                 {
                     case Direction.North:
                         if (GetItem(currentX, currentY - 1, mapData) != Item.Wall)
                             return Direction.West;
-                        wallPosition = Direction.East;
+                        currentWallPosition = Direction.East;
                         wallChecks++;
                         break;
                     case Direction.East:
                         if (GetItem(currentX + 1, currentY, mapData) != Item.Wall)
                             return Direction.North;
-                        wallPosition = Direction.South;
+                        currentWallPosition = Direction.South;
                         wallChecks++;
                         break;
                     case Direction.South:
                         if (GetItem(currentX, currentY + 1, mapData) != Item.Wall)
                             return Direction.East;
-                        wallPosition = Direction.West;
+                        currentWallPosition = Direction.West;
                         wallChecks++;
                         break;
                     case Direction.West:
                         if (GetItem(currentX - 1, currentY, mapData) != Item.Wall)
                             return Direction.South;
-                        wallPosition = Direction.North;
+                        currentWallPosition = Direction.North;
                         wallChecks++;
                         break;
                 }
@@ -251,7 +253,7 @@ namespace Sokoban
 
         private static bool IsClosedLoopFound(char[][] mapData, int mapWidth, int mapHeight,
                                               int originX, int originY, int currentX, int currentY,
-                                              Direction wallPosition)
+                                              Direction currentWallPosition)
         {
             if (currentX == 0 || currentX == mapWidth - 1
                 || currentY == 0 || currentY == mapHeight - 1)
@@ -260,16 +262,16 @@ namespace Sokoban
             if (currentX == originX && currentY == originY)
                 return true;
 
-            var nextWallPosition = GetNextWallPosition(mapData, currentX, currentY, wallPosition);
-            var nextCoords = GetNextCoords(currentX, currentY, nextWallPosition);
+            var nextExpectedWallPosition = GetNextExpectedWallPosition(mapData, currentX, currentY, currentWallPosition);
+            var nextCoords = GetNextCoords(currentX, currentY, nextExpectedWallPosition);
             return IsClosedLoopFound(mapData, mapWidth, mapHeight, originX, originY,
-                                     nextCoords[0], nextCoords[1], nextWallPosition);
+                                     nextCoords[0], nextCoords[1], nextExpectedWallPosition);
         }
 
-        private static int[] GetNextCoords(int currentX, int currentY, Direction nextWallPosition)
+        private static int[] GetNextCoords(int currentX, int currentY, Direction nextExpectedWallPosition)
         {
             var nextCoords = new int[2];
-            switch (nextWallPosition)
+            switch (nextExpectedWallPosition)
             {
                 case Direction.North:
                     nextCoords[0] = currentX + 1;
