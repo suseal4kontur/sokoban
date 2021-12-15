@@ -1,11 +1,10 @@
 ﻿namespace Sokoban
 {
-    public interface IItem
+    public interface IFunctionalItem
     {
         int X { get; set; }
         int Y { get; set; }
 
-        Map.Item GetItem();
-        char GetChar();
+        Map.ItemName GetItemName();
     }
 }

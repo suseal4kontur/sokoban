@@ -5,7 +5,7 @@ using System;
 namespace SokobanTests
 {
     [TestFixture]
-    public static class ItemsTests
+    public static class ItemClassesTests
     {
         [TestCase(-1, 0, "testmap1.txt")]
         [TestCase(7, 0, "testmap1.txt")]
@@ -13,7 +13,7 @@ namespace SokobanTests
         [TestCase(0, 6, "testmap1.txt")]
         public static void ItemWrongCoordsTest(int x, int y, string fileName)
         {
-            Sokoban.Map.LoadMap(fileName);
+            Sokoban.Map.Load(fileName);
             Action action = () => new Sokoban.Player(x, y);
             action.Should().Throw<IndexOutOfRangeException>();
         }
@@ -21,7 +21,7 @@ namespace SokobanTests
         [Test]
         public static void MovableItemMoveOnLotNullTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             Sokoban.Lot lot = null;
             Action action = () => player.MoveOnLot(lot);
@@ -31,7 +31,7 @@ namespace SokobanTests
         [Test]
         public static void MovableItemMoveOffLotNullTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             Action action = () => player.MoveOffLot();
             action.Should().Throw<NullReferenceException>();
@@ -40,7 +40,7 @@ namespace SokobanTests
         [Test]
         public static void LotPutItemOnNullTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             Sokoban.Player player = null;
             var lot = new Sokoban.Lot(1, 1);
             Action action = () => lot.PutItemOn(player);
@@ -50,7 +50,7 @@ namespace SokobanTests
         [Test]
         public static void LotPutItemOffNullTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             Sokoban.Player player = null;
             var lot = new Sokoban.Lot(1, 1);
             Action action = () => lot.PutItemOff(player);
@@ -60,7 +60,7 @@ namespace SokobanTests
         [Test]
         public static void LotPutItemOnItemNotOnLotTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 2);
             var lot = new Sokoban.Lot(1, 1);
             Action action = () => lot.PutItemOn(player);
@@ -70,7 +70,7 @@ namespace SokobanTests
         [Test]
         public static void LotPutItemOffItemOnLotTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             var lot = new Sokoban.Lot(1, 1);
             Action action = () => lot.PutItemOff(player);
@@ -80,7 +80,7 @@ namespace SokobanTests
         [Test]
         public static void LotPutItemOnTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             var lot = new Sokoban.Lot(1, 1);
             lot.PutItemOn(player);
@@ -90,7 +90,7 @@ namespace SokobanTests
         [Test]
         public static void LotPutItemOffTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             var lot = new Sokoban.Lot(1, 1);
             lot.PutItemOn(player);
@@ -102,7 +102,7 @@ namespace SokobanTests
         [Test]
         public static void MovableItemMoveOnLotTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             var lot = new Sokoban.Lot(1, 1);
             player.MoveOnLot(lot);
@@ -112,7 +112,7 @@ namespace SokobanTests
         [Test]
         public static void MovableItemMoveOffLotTest()
         {
-            Sokoban.Map.LoadMap("testmap1.txt");
+            Sokoban.Map.Load("testmap1.txt");
             var player = new Sokoban.Player(1, 1);
             var lot = new Sokoban.Lot(1, 1);
             player.MoveOnLot(lot);

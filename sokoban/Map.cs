@@ -5,11 +5,11 @@ namespace Sokoban
 {
     public static class Map
     {
-        private static char[][] MapData;
-        public static int MapWidth { get; private set; }
-        public static int MapHeight { get; private set; }
+        private static char[][] Data;
+        public static int Width { get; private set; }
+        public static int Height { get; private set; }
 
-        public enum Item
+        public enum ItemName
         {
             Empty,
             Wall,
@@ -28,34 +28,34 @@ namespace Sokoban
             South
         }
 
-        public static void ClearMap()
+        public static void Clear()
         {
-            MapData = null;
-            MapHeight = 0;
-            MapWidth = 0;
+            Data = null;
+            Height = 0;
+            Width = 0;
         }
 
-        public static void LoadMap(string fileName)
+        public static void Load(string fileName)
         {
-            MapData = GetMapData(fileName);
-            MapHeight = MapData.Length;
-            MapWidth = MapData[0].Length;
+            Data = GetMapData(fileName);
+            Height = Data.Length;
+            Width = Data[0].Length;
         }
 
-        public static void PrintMap() // maybe move to a different class
+        public static void Print() // maybe move to a different class
         {
-            if (MapData == null)
+            if (Data == null)
                 throw new NullReferenceException("Map must be loaded before accessing it");
-            foreach (var mapRow in MapData)
+            foreach (var mapRow in Data)
                 Console.WriteLine(mapRow);
         }
 
-        public static Item GetItem(int x, int y) => GetItem(x, y, MapData);
+        public static ItemName ReadItem(int x, int y) => ReadItem(x, y, Data);
 
-        public static void SetItem(int x, int y, Item item)
+        public static void WriteItem(int x, int y, ItemName item)
         {
-            CheckCoordsCorrectness(x, y, MapData);
-            MapData[y][x] = ToChar(item);
+            CheckCoordsCorrectness(x, y, Data);
+            Data[y][x] = ToChar(item);
         }
 
         private static char[][] GetMapData(string fileName)
@@ -79,31 +79,31 @@ namespace Sokoban
                 throw new IndexOutOfRangeException();
         }
 
-        private static Item ToItem(char character) => character switch
+        private static ItemName ToItem(char character) => character switch
         {
-            'p' => Item.Player,
-            '#' => Item.Wall,
-            'o' => Item.Box,
-            '+' => Item.Lot,
-            'O' => Item.BoxOnLot,
-            'P' => Item.PlayerOnLot,
-            ' ' => Item.Empty,
+            'p' => ItemName.Player,
+            '#' => ItemName.Wall,
+            'o' => ItemName.Box,
+            '+' => ItemName.Lot,
+            'O' => ItemName.BoxOnLot,
+            'P' => ItemName.PlayerOnLot,
+            ' ' => ItemName.Empty,
             _ => throw new ArgumentException($"The character {character} is unassigned"),
         };
 
-        private static char ToChar(Item item) => item switch
+        private static char ToChar(ItemName item) => item switch
         {
-            Item.Player => 'p',
-            Item.Wall => '#',
-            Item.Box => 'o',
-            Item.Lot => '+',
-            Item.BoxOnLot => 'O',
-            Item.PlayerOnLot => 'P',
-            Item.Empty => ' ',
+            ItemName.Player => 'p',
+            ItemName.Wall => '#',
+            ItemName.Box => 'o',
+            ItemName.Lot => '+',
+            ItemName.BoxOnLot => 'O',
+            ItemName.PlayerOnLot => 'P',
+            ItemName.Empty => ' ',
             _ => throw new ArgumentException($"The item {item} has no character assingned to it"),
         };
 
-        private static Item GetItem(int x, int y, char[][] mapData)
+        private static ItemName ReadItem(int x, int y, char[][] mapData)
         {
             CheckCoordsCorrectness(x, y, mapData);
             return ToItem(mapData[y][x]);
@@ -138,22 +138,22 @@ namespace Sokoban
             {
                 for (var y = 0; y < mapHeight; y++)
                 {
-                    var item = GetItem(x, y, mapData);
-                    if ((item == Item.Player || item == Item.PlayerOnLot) && playerFound)
+                    var item = ReadItem(x, y, mapData);
+                    if ((item == ItemName.Player || item == ItemName.PlayerOnLot) && playerFound)
                         return false;
                     switch (item)
                     {
-                        case Item.Player:
+                        case ItemName.Player:
                             playerFound = true;
                             break;
-                        case Item.PlayerOnLot:
+                        case ItemName.PlayerOnLot:
                             playerFound = true;
                             lotCount++;
                             break;
-                        case Item.Box:
+                        case ItemName.Box:
                             boxCount++;
                             break;
-                        case Item.Lot:
+                        case ItemName.Lot:
                             lotCount++;
                             break;
                     }
@@ -177,7 +177,7 @@ namespace Sokoban
             int[] nextCoords;
             for (var y = playerCoords[1] - 1; y >= 0; y--)
             {
-                if (GetItem(playerCoords[0], y, mapData) == Item.Wall)
+                if (ReadItem(playerCoords[0], y, mapData) == ItemName.Wall)
                 {
                     nextExpectedWallPosition = GetNextExpectedWallPosition(mapData, playerCoords[0], y + 1, Direction.North);
                     nextCoords = GetNextCoords(playerCoords[0], y + 1, nextExpectedWallPosition);
@@ -199,8 +199,8 @@ namespace Sokoban
             {
                 for (var y = 0; y < mapHeight; y++)
                 {
-                    var item = GetItem(x, y, mapData);
-                    if (item == Item.Player || item == Item.PlayerOnLot)
+                    var item = ReadItem(x, y, mapData);
+                    if (item == ItemName.Player || item == ItemName.PlayerOnLot)
                     {
                         playerCoords[0] = x;
                         playerCoords[1] = y;
@@ -224,25 +224,25 @@ namespace Sokoban
                 switch (currentWallPosition)
                 {
                     case Direction.North:
-                        if (GetItem(currentX, currentY - 1, mapData) != Item.Wall)
+                        if (ReadItem(currentX, currentY - 1, mapData) != ItemName.Wall)
                             return Direction.West;
                         currentWallPosition = Direction.East;
                         wallChecks++;
                         break;
                     case Direction.East:
-                        if (GetItem(currentX + 1, currentY, mapData) != Item.Wall)
+                        if (ReadItem(currentX + 1, currentY, mapData) != ItemName.Wall)
                             return Direction.North;
                         currentWallPosition = Direction.South;
                         wallChecks++;
                         break;
                     case Direction.South:
-                        if (GetItem(currentX, currentY + 1, mapData) != Item.Wall)
+                        if (ReadItem(currentX, currentY + 1, mapData) != ItemName.Wall)
                             return Direction.East;
                         currentWallPosition = Direction.West;
                         wallChecks++;
                         break;
                     case Direction.West:
-                        if (GetItem(currentX - 1, currentY, mapData) != Item.Wall)
+                        if (ReadItem(currentX - 1, currentY, mapData) != ItemName.Wall)
                             return Direction.South;
                         currentWallPosition = Direction.North;
                         wallChecks++;

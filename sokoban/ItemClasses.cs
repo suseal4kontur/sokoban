@@ -2,12 +2,12 @@
 
 namespace Sokoban
 {
-    public abstract class Item : IItem
+    public abstract class FunctionalItem : IFunctionalItem
     {
         private int x;
         private int y;
 
-        public Item(int x, int y)
+        public FunctionalItem(int x, int y)
         {
             X = x;
             Y = y;
@@ -18,7 +18,7 @@ namespace Sokoban
             get => x;
             set
             {
-                if (value < 0 || value > Map.MapWidth - 1)
+                if (value < 0 || value > Map.Width - 1)
                     throw new IndexOutOfRangeException();
                 x = value;
             }
@@ -29,19 +29,46 @@ namespace Sokoban
             get => y;
             set
             {
-                if (value < 0 || value > Map.MapHeight - 1)
+                if (value < 0 || value > Map.Height - 1)
                     throw new IndexOutOfRangeException();
                 y = value;
             }
         }
 
-        public abstract char GetChar();
-        public abstract Map.Item GetItem();
+        public abstract Map.ItemName GetItemName();
     }
 
-    public abstract class MovableItem : Item
+    public abstract class MovableItem : FunctionalItem
     {
-        public MovableItem(int x, int y) : base(x, y) { }
+        private int previousX;
+        private int previousY;
+
+        public int PreviousX
+        {
+            get => previousX;
+            set
+            {
+                if (value < 0 || value > Map.Width - 1)
+                    throw new IndexOutOfRangeException();
+                previousX = value;
+            }
+        }
+
+        public int PreviousY
+        {
+            get => previousY;
+            set
+            {
+                if (value < 0 || value > Map.Height - 1)
+                    throw new IndexOutOfRangeException();
+                previousY = value;
+            }
+        }
+        public MovableItem(int x, int y) : base(x, y) 
+        {
+            PreviousX = x;
+            PreviousY = y;
+        }
 
         public Lot OnLot { get; private set; }
 
@@ -66,21 +93,17 @@ namespace Sokoban
     {
         public Player(int x, int y) : base(x, y) { }
 
-        public override char GetChar() => OnLot == null ? 'p' : 'P';
-
-        public override Map.Item GetItem() => OnLot == null ? Map.Item.Player : Map.Item.PlayerOnLot;
+        public override Map.ItemName GetItemName() => OnLot == null ? Map.ItemName.Player : Map.ItemName.PlayerOnLot;
 
     }
 
-    public class Lot : Item
+    public class Lot : FunctionalItem
     {
         public Lot(int x, int y) : base(x, y) { }
 
         public bool IsItemOn { get; private set; }
 
-        public override char GetChar() => '+';
-
-        public override Map.Item GetItem() => Map.Item.Lot;
+        public override Map.ItemName GetItemName() => Map.ItemName.Lot;
 
         public void PutItemOn(MovableItem item)
         {
@@ -108,16 +131,7 @@ namespace Sokoban
     public class Box : MovableItem
     {
         public Box(int x, int y) : base(x, y) { }
-        public override char GetChar() => OnLot == null ? 'o' : 'O';
 
-        public override Map.Item GetItem() => OnLot == null ? Map.Item.Box : Map.Item.BoxOnLot;
-    }
-
-    public class Wall : Item
-    {
-        public Wall(int x, int y) : base(x, y) { }
-        public override char GetChar() => '#';
-
-        public override Map.Item GetItem() => Map.Item.Wall;
+        public override Map.ItemName GetItemName() => OnLot == null ? Map.ItemName.Box : Map.ItemName.BoxOnLot;
     }
 }
