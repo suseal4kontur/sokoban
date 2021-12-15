@@ -119,5 +119,15 @@ namespace SokobanTests
             action.Should().Throw<TimeoutException>()
                   .WithMessage($"Invalid map: the player is surrounded by 4 walls");
         }
+
+        [Test]
+        public static void UpdateMapTest()
+        {
+            Sokoban.Map.Clear();
+            Sokoban.Map.Load("testmap11.txt");
+            Sokoban.FunctionalItems.ClearFunctionalItems();
+            Action action = () => Sokoban.Map.Update();
+            action.Should().Throw<NullReferenceException>();
+        }
     }
 }

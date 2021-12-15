@@ -58,6 +58,29 @@ namespace Sokoban
             Data[y][x] = ToChar(item);
         }
 
+        public static void Update()
+        {
+            if (FunctionalItems.Player == null
+                || FunctionalItems.Boxes.Count == 0
+                || FunctionalItems.Lots.Count == 0)
+                throw new NullReferenceException("Functional items are not initialised");
+
+            foreach (var box in FunctionalItems.Boxes)
+            {
+                EraseItemIfMoved(box);
+                RewriteItem(box);
+            }
+
+            EraseItemIfMoved(FunctionalItems.Player);
+            RewriteItem(FunctionalItems.Player);
+
+            foreach (var lot in FunctionalItems.Lots)
+            {
+                if (!lot.IsItemOn)
+                    RewriteItem(lot);
+            }
+        }
+
         private static char[][] GetMapData(string fileName)
         {
             var mapDataByRows = File.ReadAllText("maps/" + fileName).Split("\r\n");
@@ -270,27 +293,38 @@ namespace Sokoban
 
         private static int[] GetNextCoords(int currentX, int currentY, Direction nextExpectedWallPosition)
         {
-            var nextCoords = new int[2];
+            var nextCoords = new int[] { currentX, currentY };
             switch (nextExpectedWallPosition)
             {
                 case Direction.North:
-                    nextCoords[0] = currentX + 1;
-                    nextCoords[1] = currentY;
+                    nextCoords[0]++;
                     break;
                 case Direction.East:
-                    nextCoords[0] = currentX;
-                    nextCoords[1] = currentY + 1;
+                    nextCoords[1]++;
                     break;
                 case Direction.South:
-                    nextCoords[0] = currentX - 1;
-                    nextCoords[1] = currentY;
+                    nextCoords[0]--;
                     break;
                 case Direction.West:
-                    nextCoords[0] = currentX;
-                    nextCoords[1] = currentY - 1;
+                    nextCoords[1]--;
                     break;
             }
             return nextCoords;
+        }
+
+        private static void EraseItemIfMoved(MovableItem item)
+        {
+            if (item.X != item.PreviousX || item.Y != item.PreviousY)
+            {
+                WriteItem(item.PreviousX, item.PreviousY, ItemName.Empty);
+                item.PreviousX = item.X;
+                item.PreviousY = item.Y;
+            }
+        }
+
+        private static void RewriteItem(FunctionalItem item)
+        {
+            WriteItem(item.X, item.Y, item.GetItemName());
         }
     }
 }

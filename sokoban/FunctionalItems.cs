@@ -5,9 +5,56 @@ namespace Sokoban
 {
     public static class FunctionalItems
     {
-        public static Player Player;
-        public static List<Box> Boxes = new List<Box>();
-        public static List<Lot> Lots = new List<Lot>();
+        public static Player Player { get; private set; }
+        public static List<Box> Boxes { get; private set; }
+        public static List<Lot> Lots { get; private set; }
+
+        public static void GetFunctionalItems()
+        {
+            Lot lot;
+            Box box;
+
+            ClearFunctionalItems();
+
+            for (var x = 0; x < Map.Width; x++)
+            {
+                for (var y = 0; y < Map.Height; y++)
+                {
+                    switch (Map.ReadItem(x, y))
+                    {
+                        case Map.ItemName.Player:
+                            Player = new Player(x, y);
+                            break;
+                        case Map.ItemName.PlayerOnLot:
+                            Player = new Player(x, y);
+                            lot = new Lot(x, y);
+                            Player.MoveOnLot(lot);
+                            Lots.Add(lot);
+                            break;
+                        case Map.ItemName.Box:
+                            Boxes.Add(new Box(x, y));
+                            break;
+                        case Map.ItemName.BoxOnLot:
+                            box = new Box(x, y);
+                            lot = new Lot(x, y);
+                            box.MoveOnLot(lot);
+                            Boxes.Add(box);
+                            Lots.Add(lot);
+                            break;
+                        case Map.ItemName.Lot:
+                            Lots.Add(new Lot(x, y));
+                            break;
+                    }
+                }
+            }
+        }
+
+        public static void ClearFunctionalItems()
+        {
+            Player = null;
+            Boxes = new List<Box>();
+            Lots = new List<Lot>();
+        }
 
         public static Box GetBox(int x, int y)
         {
