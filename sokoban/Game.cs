@@ -67,10 +67,10 @@ namespace Sokoban
             Console.CursorLeft = 0;
             Console.CursorTop = 0;
             Console.WriteLine(topText);
-            
+
             while (Console.CursorTop != Console.WindowTop + Console.WindowHeight - 2)
             {
-                for (var i = 0; i < Console.WindowWidth; i++)
+                while(Console.CursorLeft < Console.WindowWidth - 1)
                     Console.Write(" ");
                 Console.WriteLine();
             }

@@ -42,7 +42,7 @@ namespace Sokoban
             Width = Data[0].Length;
         }
 
-        public static void Print() // maybe move to a different class
+        public static void Print()
         {
             if (Data == null)
                 throw new NullReferenceException("Map must be loaded before accessing it");
