@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Sokoban.Game">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Sokoban.Game.Keys" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Game.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAABAAIEAAAAAAAABhACAAAA=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.Map">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Sokoban.Map.ItemName" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Map.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Sokoban.Map.Direction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Map.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAgABFRQQAABEBIAAAAEAAAAAAABAAggABgABEgAA=</HashCode>
+      <FileName>Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.Movement">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAIAAAAAAAAAAAAIAACAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Movement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.FunctionalItem">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAYAQ=</HashCode>
+      <FileName>ItemClasses.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sokoban.MovableItem">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAIAAAAQAAAAAAAAAQAIAAAAAAA=</HashCode>
+      <FileName>ItemClasses.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.Player">
+    <Position X="6.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>ItemClasses.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.Lot">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAABAEAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>ItemClasses.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.Box">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>ItemClasses.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sokoban.FunctionalItems">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAQAAAAAAAIAAIAACAAAAAAAEAQAAAAA=</HashCode>
+      <FileName>FunctionalItems.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Sokoban.IFunctionalItem">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAQ=</HashCode>
+      <FileName>IFunctionalItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
