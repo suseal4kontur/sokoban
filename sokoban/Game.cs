@@ -33,8 +33,13 @@ namespace Sokoban
         {
             var index = 0;
             Console.CursorVisible = false;
+
+            if (Maps.Length == 0)
+                throw new FileNotFoundException("There are no maps in /maps");
             
-            Map.Load(Maps[index].Name);
+            for (var i = Maps.Length - 1; i >= 0; i--)
+                Map.Load(Maps[i].Name);
+
             PrintMenu();
 
             while (true)
