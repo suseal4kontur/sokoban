@@ -144,8 +144,6 @@ namespace Sokoban
 
     public class Thorns : FunctionalItem
     {
-        public bool IsDestroyed { get; private set; }
-
         public Thorns(int x, int y) : base(x, y) { }
 
         public override Map.ItemName GetItemName() => Map.ItemName.Thorns;
