@@ -13,7 +13,7 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap11.txt");
             Sokoban.FunctionalItems.ClearFunctionalItems();
-            Action action = () => Sokoban.Movement.MovePlayer(ConsoleKey.UpArrow);
+            Action action = () => Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Up);
             action.Should().Throw<NullReferenceException>();
         }
 
@@ -23,7 +23,7 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap11.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Action action = () => Sokoban.Movement.MovePlayer(ConsoleKey.Enter);
+            Action action = () => Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Choose);
             action.Should().Throw<ArgumentException>();
         }
 
@@ -33,7 +33,7 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap11.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.UpArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Up);
             Sokoban.FunctionalItems.Player.Y.Should().Be(1);
         }
 
@@ -43,7 +43,7 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap11.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.LeftArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Left);
             Sokoban.FunctionalItems.Player.X.Should().Be(1);
         }
 
@@ -53,11 +53,11 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap11.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.LeftArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Left);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
             Sokoban.FunctionalItems.Player.X.Should().Be(2);
             Action action = () => Sokoban.FunctionalItems.GetBox(3, 4);
             action.Should().NotThrow();
@@ -68,9 +68,9 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap11.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
             Sokoban.FunctionalItems.Player.Y.Should().Be(3);
             Action action = () => Sokoban.FunctionalItems.GetBox(2, 4);
             action.Should().NotThrow();
@@ -82,11 +82,11 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap15.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.UpArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Up);
             Sokoban.FunctionalItems.Player.Y.Should().Be(3);
             Action action = () => Sokoban.FunctionalItems.GetBox(3, 2);
             action.Should().NotThrow();
@@ -99,7 +99,7 @@ namespace SokobanTests
             Sokoban.Map.Load("testmap15.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
             var lot = Sokoban.FunctionalItems.Player.OnLot;
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
             Sokoban.FunctionalItems.Player.X.Should().Be(2);
             Sokoban.FunctionalItems.Player.OnLot.Should().BeNull();
             lot.X.Should().Be(1);
@@ -112,9 +112,9 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap12.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.LeftArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.LeftArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.DownArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Left);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Left);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Down);
             Sokoban.FunctionalItems.Player.Y.Should().Be(3);
             var lot = Sokoban.FunctionalItems.GetLot(1, 3);
             Sokoban.FunctionalItems.Player.OnLot.Should().BeSameAs(lot);
@@ -128,8 +128,8 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap1.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
             Sokoban.FunctionalItems.Player.X.Should().Be(3);
             Action action = () => Sokoban.FunctionalItems.GetBox(4, 1);
             action.Should().NotThrow();
@@ -145,7 +145,7 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap16.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
             Sokoban.FunctionalItems.Player.X.Should().Be(2);
             Action action = () => Sokoban.FunctionalItems.GetBox(3, 1);
             action.Should().NotThrow();
@@ -162,8 +162,8 @@ namespace SokobanTests
             Sokoban.Map.Clear();
             Sokoban.Map.Load("testmap15.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
-            Sokoban.Movement.MovePlayer(ConsoleKey.RightArrow);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
             Sokoban.FunctionalItems.Player.X.Should().Be(3);
             Action action = () => Sokoban.FunctionalItems.GetBox(4, 1);
             action.Should().NotThrow();

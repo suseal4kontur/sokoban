@@ -7,7 +7,7 @@ namespace Sokoban
 {
     public static class Game
     {
-        private enum Keys
+        public enum Keys
         {
             Up,
             Down,
@@ -59,7 +59,15 @@ namespace Sokoban
                 PrintMenu();
             }
 
-            PlayMap(index);
+            switch (PlayMap(index))
+            {
+                case 1:
+                    ShowWinningScreen();
+                    break;
+                case -1:
+                    ShowLosingScreen();
+                    break;
+            }
         }
 
         private static void PrintMenu()
@@ -92,7 +100,7 @@ namespace Sokoban
 
         private static void PrintGame(int index)
         {
-            var topText = $"Map {index}";
+            var topText = $"Map {index + 1}";
             var bottomText = $"{KeyMap[Keys.Up]} - up, {KeyMap[Keys.Down]} - down, {KeyMap[Keys.Left]} - left," +
                            $"\n{KeyMap[Keys.Right]} - right, {KeyMap[Keys.Exit]} - exit";
 
@@ -108,7 +116,7 @@ namespace Sokoban
             Console.CursorTop = Console.WindowTop + Console.WindowHeight - 6;
         }
 
-        private static void PlayMap(int index)
+        private static int PlayMap(int index)
         {
             Console.Clear();
             
@@ -120,19 +128,22 @@ namespace Sokoban
 
                 var keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == KeyMap[Keys.Exit])
-                    return;
-                if (keyInfo.Key == KeyMap[Keys.Up]
-                    || keyInfo.Key == KeyMap[Keys.Down]
-                    || keyInfo.Key == KeyMap[Keys.Left]
-                    || keyInfo.Key == KeyMap[Keys.Right])
-                    Movement.MovePlayer(keyInfo.Key);
+                    return 0;
+                if (keyInfo.Key == KeyMap[Keys.Up])
+                    Movement.MovePlayer(Keys.Up); 
+                if (keyInfo.Key == KeyMap[Keys.Down])
+                    Movement.MovePlayer(Keys.Down);
+                if (keyInfo.Key == KeyMap[Keys.Left])
+                    Movement.MovePlayer(Keys.Left);
+                if (keyInfo.Key == KeyMap[Keys.Right])
+                    Movement.MovePlayer(Keys.Right);
 
                 Map.Update();
+                if (AreLoosingConditionsMet())
+                    return -1;
                 if (AreWinningConditionsMet())
-                    break;
+                    return 1;
             }
-
-            ShowWinningScreen();
         }
 
         private static bool AreWinningConditionsMet()
@@ -150,6 +161,17 @@ namespace Sokoban
             return boxesCount == 0;
         }
 
+        private static bool AreLoosingConditionsMet()
+        {
+            foreach (var thorns in FunctionalItems.Thorns)
+            {
+                if (thorns.IsPlayerOn(FunctionalItems.Player))
+                    return true;
+            }
+
+            return false;
+        }
+
         private static void ShowWinningScreen()
         {
             Console.CursorLeft = 0;
@@ -157,6 +179,16 @@ namespace Sokoban
             Console.WriteLine("WINNER!");
             Map.Print();
             Console.WriteLine("CONGRATULATIONS!");
+            Console.ReadKey();
+        }
+
+        private static void ShowLosingScreen()
+        {
+            Console.CursorLeft = 0;
+            Console.CursorTop = 0;
+            Console.WriteLine("You lost!");
+            Map.Print();
+            Console.WriteLine("What a shame.");
             Console.ReadKey();
         }
     }

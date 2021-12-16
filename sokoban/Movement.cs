@@ -4,7 +4,7 @@ namespace Sokoban
 {
     public static class Movement
     {
-        public static void MovePlayer(ConsoleKey key)
+        public static void MovePlayer(Game.Keys key)
         {
             if (FunctionalItems.Player == null
                 || FunctionalItems.Boxes.Count == 0
@@ -19,6 +19,7 @@ namespace Sokoban
             switch (targetedItem)
             {
                 case Map.ItemName.Empty:
+                case Map.ItemName.Thorns:
                     MovePlayer(targetCoords);
                     break;
                 case Map.ItemName.Lot:
@@ -32,28 +33,31 @@ namespace Sokoban
                     if (MoveBox(targetCoords, key))
                         MovePlayerOnLot(targetCoords);
                     break;
+                case Map.ItemName.PlayerOnLot:
+                    MovePlayerOnLot(targetCoords);
+                    break;
             }
         }
 
-        private static int[] GetTargetCoords(int currentX, int currentY, ConsoleKey key)
+        private static int[] GetTargetCoords(int currentX, int currentY, Game.Keys key)
         {
             var targetCoords = new int[] { currentX, currentY };
             switch (key)
             {
-                case ConsoleKey.UpArrow:
+                case Game.Keys.Up:
                     targetCoords[1]--;
                     break;
-                case ConsoleKey.DownArrow:
+                case Game.Keys.Down:
                     targetCoords[1]++;
                     break;
-                case ConsoleKey.LeftArrow:
+                case Game.Keys.Left:
                     targetCoords[0]--;
                     break;
-                case ConsoleKey.RightArrow:
+                case Game.Keys.Right:
                     targetCoords[0]++;
                     break;
                 default:
-                    throw new ArgumentException("The key is not an arrow key");
+                    throw new ArgumentException("The key is not a direction key");
             }
             return targetCoords;
         }
@@ -73,7 +77,7 @@ namespace Sokoban
             FunctionalItems.Player.MoveOnLot(lot);
         }
 
-        private static bool MoveBox(int[] currentCoords, ConsoleKey key)
+        private static bool MoveBox(int[] currentCoords, Game.Keys key)
         {
             var box = FunctionalItems.GetBox(currentCoords[0], currentCoords[1]);
             var targetCoords = GetTargetCoords(box.X, box.Y, key);
@@ -86,6 +90,9 @@ namespace Sokoban
                     return true;
                 case Map.ItemName.Lot:
                     MoveBoxOnLot(box, targetCoords);
+                    return true;
+                case Map.ItemName.Thorns:
+                    MoveBoxOnThorns(box, targetCoords);
                     return true;
                 default:
                     return false;
@@ -105,6 +112,13 @@ namespace Sokoban
             MoveBox(box, coords);
             var lot = FunctionalItems.GetLot(coords[0], coords[1]);
             box.MoveOnLot(lot);
+        }
+
+        private static void MoveBoxOnThorns(Box box, int[] coords)
+        {
+            MoveBox(box, coords);
+            var thorns = FunctionalItems.GetThorns(coords[0], coords[1]);
+            box.MoveOnThorns(thorns);
         }
     }
 }

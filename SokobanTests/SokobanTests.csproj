@@ -27,6 +27,9 @@
     <None Update="maps\testmap14.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="maps\testmap17.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="maps\testmap16.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

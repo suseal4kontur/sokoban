@@ -8,6 +8,7 @@ namespace Sokoban
         public static Player Player { get; private set; }
         public static List<Box> Boxes { get; private set; }
         public static List<Lot> Lots { get; private set; }
+        public static List<Thorns> Thorns { get; private set; }
 
         public static void GetFunctionalItems()
         {
@@ -44,6 +45,9 @@ namespace Sokoban
                         case Map.ItemName.Lot:
                             Lots.Add(new Lot(x, y));
                             break;
+                        case Map.ItemName.Thorns:
+                            Thorns.Add(new Thorns(x, y));
+                            break;
                     }
                 }
             }
@@ -54,6 +58,7 @@ namespace Sokoban
             Player = null;
             Boxes = new List<Box>();
             Lots = new List<Lot>();
+            Thorns = new List<Thorns>();
         }
 
         public static Box GetBox(int x, int y)
@@ -76,6 +81,17 @@ namespace Sokoban
             }
 
             throw new ArgumentException($"No lot found with coords ({x},{y})");
+        }
+
+        public static Thorns GetThorns(int x, int y)
+        {
+            foreach (var thorns in Thorns)
+            {
+                if (thorns.X == x && thorns.Y == y)
+                    return thorns;
+            }
+
+            throw new ArgumentException($"No thorns found with coords ({x},{y})");
         }
     }
 }

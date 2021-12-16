@@ -120,5 +120,14 @@ namespace SokobanTests
             player.MoveOffLot();
             player.OnLot.Should().BeNull();
         }
+
+        [Test]
+        public static void BoxMoveOnThornsTest()
+        {
+            Sokoban.Map.Clear();
+            Sokoban.Map.Load("testmap17.txt");
+            Sokoban.Movement.MovePlayer(Sokoban.Game.Keys.Right);
+            Sokoban.FunctionalItems.Thorns.Should().BeEmpty();
+        }
     }
 }

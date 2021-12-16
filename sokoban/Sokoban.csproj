@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="maps\map6.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="maps\map3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

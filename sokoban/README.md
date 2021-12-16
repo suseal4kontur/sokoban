@@ -7,7 +7,8 @@ This is a C# project for a game Sokoban, the basic rules of which are:
 >The player can move left, right, up and down. But he cannot pass
 >through walls and boxes. The player can push the box if it does not
 >rest against a wall or other box. The player wins if all the boxes
->are on the storage squares.
+>are on the storage squares. If the player steps on thorns he loses.
+>If a box is moved on thorns they are destroyed.
 
 The project is a console application that takes input from a user 
 as keystrokes. There are 5 different maps available with possibility
@@ -29,6 +30,7 @@ Every square must be represented by a corresponding character:
 - `o` - a box, placed on an empty square;
 - `O` - a box, placed on a storage space;
 - `+` - a storage space;
+- `w` - thorns;
 - ` ` - an empty square.
 
 ### Functionality
@@ -55,6 +57,7 @@ according to the game rules.
 
 When all the boxes are placed on the storage places the game is won.
 If a box is stuck the user can't do anything for now but to exit.
+If the player moves on thorns the game is lost.
 
 ### Architecture
 ![](ClassDiagram.png)
@@ -79,7 +82,7 @@ for any object and universal properties for its coordinates.
 MovableItem is a base class that adds properties and methods needed
 for handling its movement and ability to be placed on a storage space.
 
-Lot, Box and Player classes represent squares that have functions
+Lot, Box, Thorns and Player classes represent squares that have functions
 (unlike walls and empty spaces).
 
 ##### FunctionalItems

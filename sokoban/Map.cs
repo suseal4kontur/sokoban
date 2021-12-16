@@ -17,7 +17,8 @@ namespace Sokoban
             Box,
             Lot,
             BoxOnLot,
-            PlayerOnLot
+            PlayerOnLot,
+            Thorns
         }
 
         public enum Direction
@@ -74,6 +75,9 @@ namespace Sokoban
             EraseItemIfMoved(FunctionalItems.Player);
             RewriteItem(FunctionalItems.Player);
 
+            foreach (var thorns in FunctionalItems.Thorns)
+                RewriteItem(thorns);
+
             foreach (var lot in FunctionalItems.Lots)
             {
                 if (!lot.IsItemOn)
@@ -110,6 +114,7 @@ namespace Sokoban
             '+' => ItemName.Lot,
             'O' => ItemName.BoxOnLot,
             'P' => ItemName.PlayerOnLot,
+            'w' => ItemName.Thorns,
             ' ' => ItemName.Empty,
             _ => throw new ArgumentException($"The character {character} is unassigned"),
         };
@@ -122,6 +127,7 @@ namespace Sokoban
             ItemName.Lot => '+',
             ItemName.BoxOnLot => 'O',
             ItemName.PlayerOnLot => 'P',
+            ItemName.Thorns => 'w',
             ItemName.Empty => ' ',
             _ => throw new ArgumentException($"The item {item} has no character assingned to it"),
         };

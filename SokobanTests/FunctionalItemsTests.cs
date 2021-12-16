@@ -55,6 +55,17 @@ namespace SokobanTests
             Sokoban.FunctionalItems.Lots[0].IsItemOn.Should().BeTrue();
         }
 
+        [Test]
+        public static void GetFunctionalItemsTestThree()
+        {
+            Sokoban.Map.Clear();
+            Sokoban.Map.Load("testmap17.txt");
+            Sokoban.FunctionalItems.ClearFunctionalItems();
+            Sokoban.FunctionalItems.GetFunctionalItems();
+            Sokoban.FunctionalItems.Thorns[0].X.Should().Be(3);
+            Sokoban.FunctionalItems.Thorns[0].Y.Should().Be(1);
+        }
+        
         [TestCase(1, 2, "testmap15.txt", 0)]
         [TestCase(3, 1, "testmap15.txt", 1)]
         [TestCase(3, 2, "testmap15.txt", 2)]
@@ -96,6 +107,16 @@ namespace SokobanTests
             Sokoban.Map.Load("testmap15.txt");
             Sokoban.FunctionalItems.GetFunctionalItems();
             Action action = () => Sokoban.FunctionalItems.GetLot(1, 2);
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Test]
+        public static void GetThornsIncorrectCoordsTest()
+        {
+            Sokoban.Map.Clear();
+            Sokoban.Map.Load("testmap17.txt");
+            Sokoban.FunctionalItems.GetFunctionalItems();
+            Action action = () => Sokoban.FunctionalItems.GetThorns(1, 2);
             action.Should().Throw<ArgumentException>();
         }
     }

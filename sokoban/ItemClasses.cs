@@ -133,5 +133,31 @@ namespace Sokoban
         public Box(int x, int y) : base(x, y) { }
 
         public override Map.ItemName GetItemName() => OnLot == null ? Map.ItemName.Box : Map.ItemName.BoxOnLot;
+
+        public void MoveOnThorns(Thorns thorns)
+        {
+            if (thorns == null)
+                throw new ArgumentNullException();
+            FunctionalItems.Thorns.Remove(thorns);
+        }
+    }
+
+    public class Thorns : FunctionalItem
+    {
+        public bool IsDestroyed { get; private set; }
+
+        public Thorns(int x, int y) : base(x, y) { }
+
+        public override Map.ItemName GetItemName() => Map.ItemName.Thorns;
+
+        public bool IsPlayerOn(Player player)
+        {
+            if (player == null)
+                throw new ArgumentNullException();
+
+            if (player.X == X && player.Y == Y)
+                return true;
+            return false;
+        }
     }
 }
