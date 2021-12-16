@@ -60,7 +60,6 @@ namespace Sokoban
             }
 
             PlayMap(index);
-
         }
 
         private static void PrintMenu()
