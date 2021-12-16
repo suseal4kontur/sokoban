@@ -60,7 +60,7 @@ namespace Sokoban
 
         private static void PrintMenu()
         {
-            var topText = "Choose a level:";
+            var topText = "Choose a map:";
             var bottomText = $"{KeyMap[Keys.Left]} - previous, {KeyMap[Keys.Right]} - next," +
                             $"\n{KeyMap[Keys.Choose]} - choose, {KeyMap[Keys.Exit]} - exit";
 
